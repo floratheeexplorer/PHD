@@ -5,7 +5,7 @@ Created on Mon Nov 11 16:37:59 2019
 @author: 20304269
 """
 
-#20191107_assignment_2_lines.py
+#source: 20191107_assignment_2_lines.py
 
 import pandas as pd
 
@@ -14,7 +14,8 @@ def loca(df):
     loca = len(df.loc[df['DBN_NO'] == selected, 'LOCATION_CODE'].drop_duplicates().tolist())
     return loca
 
-filenames = ['4840+4850+4854', '4887+4856+4884', '4903+4902+4888', '4771+4774+4773', '4783+4784+4786', '4793+4798+4804', '4824+4812+4825', '4987+4986+4996']
+#TODO: Input filenames
+filenames = ['4840+4850+4854']
 
 for f in filenames:
 
@@ -84,11 +85,8 @@ for f in filenames:
     while not len(DBN_list) == 0:    
        
         #select the DBN with the highest max SKU
-#        print('selected', selected)    
-     
-    #    print('loca_pl_1', loca_pl_1)
-    #    print('loca_pl_2', loca_pl_2)  
-        
+#        print('selected', selected)   
+             
         #check whether line 1 still has space
         if loca_pl_1 - loca(df) >= 0:
 #            print('add to 1')
@@ -107,18 +105,11 @@ for f in filenames:
     
             for index, row in pivot_df.iterrows():
                 inter_calc = len(stores.intersection(row[0]))
-                intersection.append(inter_calc)
-                
-#            print('intersection', intersection)
-#            print('max(intersection)', max(intersection))
-#            print('length of intersection',len(intersection))
-#            print('length of DBN list', len(DBN_list))
+                intersection.append(inter_calc)              
             
             selected = DBN_list[intersection.index(max(intersection))]
-#            print('new selected', selected)       
            
         elif loca_pl_2 - loca(df) >= 0:
-#            print('add to 2')
             
             df_pl_2 = df_pl_2.append(df.loc[df['DBN_NO'] == selected]) #no inplace with append           
             loca_pl_2 = loca_pl_2 - loca(df_pl_2) 
@@ -135,17 +126,10 @@ for f in filenames:
             for index, row in pivot_df.iterrows():
                 inter_calc = len(stores.intersection(row[0]))
                 intersection.append(inter_calc)       
-                    
-#            print('intersection', intersection)
-#            print('max(intersection)', max(intersection))
-#            print('length of intersection',len(intersection))
-#            print('length of DBN list', len(DBN_list))
             
             selected = DBN_list[intersection.index(max(intersection))]
-#            print('new selected', selected)
             
         elif loca_pl_3 - loca(df) >= 0:
-#            print('add to 2')
             
             df_pl_3 = df_pl_3.append(df.loc[df['DBN_NO'] == selected]) #no inplace with append           
             loca_pl_3 = loca_pl_3 - loca(df_pl_3) 
@@ -162,14 +146,8 @@ for f in filenames:
             for index, row in pivot_df.iterrows():
                 inter_calc = len(stores.intersection(row[0]))
                 intersection.append(inter_calc)       
-                    
-#            print('intersection', intersection)
-#            print('max(intersection)', max(intersection))
-#            print('length of intersection',len(intersection))
-#            print('length of DBN list', len(DBN_list))
             
             selected = DBN_list[intersection.index(max(intersection))]
-#            print('new selected', selected)
             
         else:
             print(f)

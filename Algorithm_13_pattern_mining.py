@@ -4,7 +4,7 @@ Created on Thu Jan 16 10:09:50 2020
 
 @author: 20304269
 """
-#20200116_data_mining_small_example
+#source:20200116_data_mining_small_example
 
 ##http://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/
 ##https://www.geeksforgeeks.org/implementing-apriori-algorithm-in-python/
@@ -23,8 +23,7 @@ def loca(df):
 
 #loading the datasetset
 #u+z
-#filenames = ['4771+4773', '4783+4784', '4793+4798', '4812+4825', '4837+4834', '4850+4854', '4881+4856', '4903+4902', '4955+4956', '4987+4986', '5010+5008', '5011+5012', '4759+4758', '4887+4884', '4906+4905'] #support 0.3
-filenames = ['4771+4773', '4793+4798', '4850+4854', '4881+4856', '4759+4758', '4906+4905'] #support 0.1
+filenames = ['4771+4773']
 
 for f in filenames:   
                                         
@@ -145,10 +144,9 @@ for f in filenames:
     ##allocation algorithm
     while not rules.empty:                    
         if loca_pl_1 - picking_line_1_loc >= 0:
-    #        print('locations available 1', loca_pl_1 - picking_line_1_loc)
+
             if rules['association'][0] not in picking_line_1:
                 selected = list(set(rules['association'][0]) - set(picking_line_1))
-    #            print('selected', selected)
     
                 picking_line_1_loc = picking_line_1_loc + loca(df2)
     
@@ -159,11 +157,9 @@ for f in filenames:
                 locations = locations - picking_line_1_loc
                 
         elif loca_pl_2 - picking_line_2_loc >= 0:
-    #        print('locations available 2', loca_pl_2 - picking_line_2_loc)
+
             if rules['association'][0] not in picking_line_1 and rules['association'][0] not in picking_line_2:
-#                print('picking_line_1', list(set(picking_line_1)))
                 selected = list(set(rules['association'][0]) - set(picking_line_1) - set(picking_line_2))
-    #            print('selected', selected)
     
                 picking_line_2_loc = picking_line_2_loc + loca(df2)
     

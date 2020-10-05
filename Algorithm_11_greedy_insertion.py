@@ -1,6 +1,4 @@
-
-
-#20191107_assignment_2_lines.py
+#source:20191107_assignment_2_lines.py
 
 import pandas as pd
 
@@ -23,7 +21,8 @@ def loca(df):
     loca = len(df.loc[df['DBN_NO'] == selected, 'LOCATION_CODE'].drop_duplicates().tolist())
     return loca
 
-filenames = ['4840+4850+4854', '4887+4856+4884', '4903+4902+4888', '4771+4774+4773', '4783+4784+4786', '4793+4798+4804', '4824+4812+4825', '4987+4986+4996']
+#TODO: Input filenames
+filenames = ['4840+4850+4854']
 
 for f in filenames:
 
@@ -110,35 +109,22 @@ for f in filenames:
        
         #select the DBN with the highest max SKU
         selected = sort_max_SKU(df).index[0] #don't change index before to get DBN selected
-#        print('selected', selected)
-#     
-#        print('loca_pl_1', loca_pl_1)
-#        print('loca_pl_2', loca_pl_2)  
-        
+#        print('selected', selected)     
+       
         #check whether adding SKU to line 1 increases number of branches more for line 1 or line 2
         if loca_pl_1 - loca(df) >= 0 and (count_branch(df_pl_1.append(df.loc[df['DBN_NO'] == selected])) - count_pl_1) <= (count_branch(df_pl_2.append(df.loc[df['DBN_NO'] == selected])) - count_pl_2):
-#            print('compare 1', count_branch(df_pl_1.append(df.loc[df['DBN_NO'] == selected])) - count_pl_1)
-#            print('compare 2', count_branch(df_pl_2.append(df.loc[df['DBN_NO'] == selected])) - count_pl_2)
-#            print('add to 1')
             df_pl_1 = df_pl_1.append(df.loc[df['DBN_NO'] == selected]) #no inplace with append           
             loca_pl_1 = loca_pl_1 - loca(df_pl_1)  
-            count_pl_1 = count_branch(df_pl_1)   
-#            print('count_pl_1', count_pl_1)          
-       
+            count_pl_1 = count_branch(df_pl_1)           
         elif loca_pl_2 - loca(df) >= 0:
-#            print('add to 2')
             df_pl_2 = df_pl_2.append(df.loc[df['DBN_NO'] == selected]) #no inplace with append
             loca_pl_2 = loca_pl_2 - loca(df_pl_2)
-            count_pl_2 = count_branch(df_pl_2) 
-#            print('count_pl_2', count_pl_2)       
+            count_pl_2 = count_branch(df_pl_2)   
             
         elif loca_pl_3 - loca(df) >= 0:
-#            print('add to 2')
             df_pl_3 = df_pl_3.append(df.loc[df['DBN_NO'] == selected]) #no inplace with append
             loca_pl_3 = loca_pl_3 - loca(df_pl_3)
-            count_pl_3 = count_branch(df_pl_3) 
-#            print('count_pl_2', count_pl_2)  
-        
+            count_pl_3 = count_branch(df_pl_3)         
         else:
             print('f', f)
             print('unassigned DBNs')

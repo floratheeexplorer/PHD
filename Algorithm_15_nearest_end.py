@@ -5,10 +5,7 @@ Created on Tue Apr 17 08:02:29 2018
 @author: 20304269
 """
 
-#20200310_nearest_end_tested_all_files_56_SKUs_u.py
-
-#TODO: Sequences batches according to nearest end, but does not count all cycles traversed since start and end location can be the same!
-#TODO: a was changed to h, c was changed to d
+#TODO: 20200310_nearest_end_tested_all_files_56_SKUs_u.py
 
 import pandas as pd
 
@@ -20,7 +17,8 @@ order_seq = []
 
 #-----------
 
-filenames = ['4881+4887+4856+4884', '4783+4774+4784+4786', '4824+4812+4804+4825']
+#TODO: input filenames
+filenames = ['4881+4887+4856+4884']
 
 for e in filenames:  
     
@@ -37,17 +35,14 @@ for e in filenames:
         for c in scenarios:
 
             lines = ['df1', 'df2', 'df3', 'df4']
-#            lines = ['df1'] ## for tests
             
             for o in lines: 
                 
                 assignment = ['_1_1', '_1_2','_1_3', '_1_4', '_1_5']
-#                assignment = ['_1_5'] ## for tests
                 
                 for a in assignment:
     
                     extension = ['_SKU_location_random_', '_SKU_location_freq_']
-#                    extension = ['_SKU_location_random_'] ## for tests
                          
                     for z in extension:
                         
@@ -63,8 +58,6 @@ for e in filenames:
                         orders = df.groupby(['BATCH_NO'], as_index = False) #must be sorted according to locations!                                             
                                   
                         ##Iterate through split lists                     
-                        ##after batching specific!           
-                        #0: picking line information 176 1floor+xA
                         ##after batching specific!           
                         #0: picking line information 176 1floor+xA
                         if (e == '4881+4887+4856+4884' and o == 'df1') or (e == '4881+4887+4856+4884' and o == 'df4' and a == '_1_1') or (e == '4783+4774+4784+4786' and o == 'df1') or (e == '4824+4812+4804+4825' and o == 'df1') or (e == '4824+4812+4804+4825' and o == 'df4' and a == '_1_2'):  
@@ -121,13 +114,10 @@ for e in filenames:
                         curr_loc = 101
                         while True:
                             
-                            if not len(df.index) == 0:      
-                #                print('Length of index:', len(df.index))       
-                            #for curr_loc in line:   
-                #                print('curr_loc1', curr_loc)
+                            if not len(df.index) == 0:         
+
                                 locations = df['LOCATION_CODE'].tolist()
                 #                print('Updated locations:', locations) 
-                                    #list_1 = []
                 #                print('curr_loc before condition:', curr_loc)
                                 if curr_loc in locations:
                 #                    print('curr_loc start', curr_loc)
@@ -137,36 +127,27 @@ for e in filenames:
                         #            print('Smallest END_LOCATION', a)
                                     seq_all = df.loc[(df['LOCATION_CODE'] == curr_loc) & (df['END_LOCATION'] == h), 'BATCH_NO'].tolist() #multiple conditions TODO change to item
                                     seq = seq_all[0]
-                        #            print('Sequence', seq)
                                     sequence.append(seq)
                                     df = df.set_index('BATCH_NO').drop(seq).reset_index() #drop row if it contains variable; https://stackoverflow.com/questions/46655712/remove-rows-and-valueerror-arrays-were-different-lengths?rq=1
-                        #            print('New df:', df) 
                                     b = curr_loc + h # determine end location !no additional +1!
-                #                    print('b', b)
+
                                     if b > last_bay: 
                                         curr_loc = b - bay_max
                                         count  +=1   
-                #                        print('count if', count)
                                     else: 
-                                        curr_loc = b
-                #                    print('curr_loc in', curr_loc)    
+                                        curr_loc = b  
                              
                                 else:
-                #                    print('no')
                                     d = curr_loc + 1 # determine end location
-                #                    print('c', c)
                                     if d > last_bay:
                                         curr_loc = d - bay_max
                                         count +=1
-                #                        print('count else', count)
                                     else:
                                         curr_loc = d
-                #                    print('curr_loc out', curr_loc)     
-                               
+                                        
                             else:
                                 if curr_loc != first_bay and curr_loc < last_bay: #finishes the cycle
                                     count +=1
-                #                    print('count else out', count)
                                 break
                         
                     #            print('---')

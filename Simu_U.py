@@ -5,7 +5,7 @@ Created on Wed Feb 13 15:15:15 2019
 @author: 20304269
 
 """
-#20190917_simu_u_line_modul_10_config_congestion.py
+#source:20190917_simu_u_line_modul_10_config_congestion.py
 
 import pandas as pd
 import numpy as np
@@ -135,9 +135,8 @@ for f in filenames:
         #        print('packing', i, packing)
                 
 #                packing_boxes.append(pack_slip)
-#                packing_speed.append(packing)           
-                            
-                              
+#                packing_speed.append(packing)         
+                                                     
                 #### walk + pick
                 orders = df['BATCH_NO'].unique().tolist()
         #        print('orders', orders) 
@@ -152,10 +151,9 @@ for f in filenames:
                     stops = df.loc[(df['BATCH_NO'] == i), 'LOCATION_CODE'].tolist()
                     all_stops.extend(stops)
                     
-#                    print('stops', stops)             
+#                    print('stops', stops)            
                                                  
-                    ### time to walk  
-                   
+                    ### time to walk                     
             #        print('start_bay', start_bay)
             
                     if stops[0] <= stops[-1] and start_bay <= stops[0]:
@@ -202,9 +200,7 @@ for f in filenames:
                             
             #        print('walk_bays', walk_bays)            
                     walking = sum(walk_speed)
-            #        print('walking', i, walking)
-            #        print('length of walk bays', len(walk_bays)) 
-            
+            #        print('length of walk bays', len(walk_bays))             
                     
                     ### time to pick
                     
@@ -314,24 +310,24 @@ for f in filenames:
 #        avg_times_total_pickers = np.mean(total_times_pickers)
 #        avg_total_time_pickers.append(avg_times_total_pickers) #list for the data
 #        print('avg_total_time_pickers', avg_total_time_pickers)
-#        
-#data = [filename_order, extension_order, configuration_order, order_name, walking_bays_order, picking_bays_order, packing_boxes_order, walking_speed_order, picking_speed_order, packing_speed_order]
-#
-##print to csv 
-###order specific
-#file = open('20200312_simu_u_line_module_nearest_end_delay_8_pickers'+e+'_10_config_order_specific.csv', 'w')
-#with file:
-#    writer = csv.writer(file)
-#    writer.writerows(data)       
-#            
-#                                               
-#data2 = [filename, extension, picker_no, pick_dens_m, avg_total_times, avg_total_time_delaying, avg_total_time_pickers]
-#        
-###batching algorithm specific   
-#file = open('20200312_simu_u_line_module_nearest_end_delay_8_pickers'+e+'_10_config.csv', 'w')
-#with file:
-#    writer = csv.writer(file)
-#    writer.writerows(data2)                     
-#            
+        
+data = [filename_order, extension_order, configuration_order, order_name, walking_bays_order, picking_bays_order, packing_boxes_order, walking_speed_order, picking_speed_order, packing_speed_order]
+
+#print to csv 
+##order specific
+file = open('20200312_simu_u_line_module_nearest_end_delay_8_pickers'+e+'_10_config_order_specific.csv', 'w')
+with file:
+    writer = csv.writer(file)
+    writer.writerows(data)       
+            
+                                               
+data2 = [filename, extension, picker_no, pick_dens_m, avg_total_times, avg_total_time_delaying, avg_total_time_pickers]
+        
+##batching algorithm specific   
+file = open('20200312_simu_u_line_module_nearest_end_delay_8_pickers'+e+'_10_config.csv', 'w')
+with file:
+    writer = csv.writer(file)
+    writer.writerows(data2)                     
+            
 print('\007')        
 print('Metta!')

@@ -15,17 +15,8 @@ import copy
 import time
 from datetime import timedelta
 
-#INPUT: cost matrix (for batches of 2)
-filenames = ['20130425_3150_LOLS_2' , '20130227_1065_LOLS_2', '20130422_2964_LOLS_5', '20130403_2137_LOLS_2', '20130403_2147_LOLS_2', \
-             '20130422_2968_LOLS_5', '20130320_1756_LOLS_2', '20130209_521_LOLS_2', '20130222_852_LOLS_2', '20130223_1814_LOLS_5', \
-             '20130424_3142_LOLS_8', '20130406_2459_LOLS_2', '20130322_1810_LOLS_2', '20130326_1865_LOLS_2', '20130410_2913_LOMS_2', \
-             '20130322_1813_LOMS_8', '20130327_1966_LOMS_2', '20130307_1503_LOMS_5', '20130207_505_LOMS_2', '20130326_1868_LOMS_5', \
-             '20130225_926_LOMS_2', '20130409_2503_LOMS_2', '20130411_2569_LOMS_2', '20130312_1569_LOMS_3', '20130418_2817_LOMS_8', \
-             '20130307_1460_LOMS_8', '20130219_779_LOSS_2', '20130307_1501_LOSS_2', '20130228_1079_LOSS_8', '20130228_1080_LOSS_5', \
-             '20130409_2502_LOSS_5', '20130410_2550_LOSS_8', '20130415_2640_LOSS_5', '20130403_2037_LOSS_3', '20130313_1605_LOSS_2', \
-             '20130318_1715_LOSS_5', '20130216_704_LOSS_2', '20130326_1942_LOSS_5', '20130402_2022_MONS_2', '20130216_701_MONS_5', \
-             '20130212_591_MONS_2', '20130220_790_MONS_5', '20130212_592_MONS_2', '20130225_910_MONS_2', '20130416_2710_SOLS_6', \
-             '20130214_669_SOMS_7', '20130208_517_SOMS_6', '20130223_867_SOSS_5', '20130208_515_SOSS_5', '20130425_3160_SOLS_6']
+#INPUT: file names of cost matrix (for batches of 2)
+filenames = ['20130425_3150_LOLS_2']
 
 for f in filenames:
     
@@ -41,8 +32,6 @@ for f in filenames:
                 df.loc[11111] = int(100)
         for col in df:
             df.loc[col, col] = 100
-#        print('New df with dummy 100:')  
-#        print(df.head(3))
         
         #INPUT for batching
         df2 = pd.read_csv(f+'.csv', names = ['SCHEDULE_DATE', 'RELEASE_DATE', 'LINE_NO', 'BRANCH_NO', 'DBN_NO', 'SKU_NO', 'LOCATION_CODE', 'NUM_UNITS_y', 'NUM_BRANCHES', 'NUM_UNITS_x', 'VOLUME_PER_UNIT', 'WEIGHT_PER_UNIT_KG']) 
@@ -52,7 +41,6 @@ for f in filenames:
         #Step 1: Choose initial configuration (random or greedy) 
         o = df.columns.tolist()
         sol = random.sample(o, len(o)) #random
-    #    print('sol', sol)
         
         #Step 0a: Calculate water-level aka cost
         def cost(sol):
@@ -94,16 +82,11 @@ for f in filenames:
                     break
                 else:            
     #                print('Current water level:', initial_water_level)
-                    old_cost = copy.deepcopy(cost(solution)) #included old_cost to compare in if, otherwise constant count
-    #                print('old_cost', cost(solution))            
+                    old_cost = copy.deepcopy(cost(solution)) #included old_cost to compare in if, otherwise constant count         
                     new_solution = neighbour(solution) #choose new config
-                    new_cost = cost(new_solution) #E or new config
-    #                print('new_cost', new_cost)
+                    new_cost = cost(new_solution) #E or new config  
                     if old_cost <= new_cost:
-    #                    print('old_cost_in_if', old_cost)
-    #                    print('new_cost_in_if', new_cost)
-                        count += 1 #TODO: Why constant count??
-    #                    print('count', count)
+                        count += 1 
                     if new_cost < initial_water_level:
                         count = 0
                         solution = copy.deepcopy(new_solution) #accepting new_solution
@@ -111,7 +94,6 @@ for f in filenames:
                         if cost(solution) < cost(best_solution):
                             best_solution = copy.deepcopy(solution)        
                     i += 1
-    #                print('i', i)
             return best_solution
         
         ##timing   
@@ -159,7 +141,7 @@ for f in filenames:
         batched.to_csv(f+'_batched_2'+g+'_gd.csv',  index=None, header=False) 
     
 print('\007')
-print('Last one down')
+print('Metta!')
 
 
     

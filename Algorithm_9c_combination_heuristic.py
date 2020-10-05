@@ -9,7 +9,6 @@ Created on Thu Aug  9 09:01:30 2018
 
 import pandas as pd
 import numpy as np
-import random
 import time
 import csv
 
@@ -51,15 +50,12 @@ for f in file_names:
                 for col in df:
                     df.loc[col, col] = 100 
                     
-    #            print(df)
-                    
                 #INPUT for batching + search logic
                 df2 = pd.read_csv(f+'.csv', names = ['SCHEDULE_DATE', 'RELEASE_DATE', 'LINE_NO', 'BRANCH_NO', 'DBN_NO', 'SKU_NO', 'LOCATION_CODE', 'NUM_UNITS_y', 'NUM_BRANCHES', 'NUM_UNITS_x', 'VOLUME_PER_UNIT', 'WEIGHT_PER_UNIT_KG']) 
                 branch_list = df2['BRANCH_NO'].tolist()
                       
                 ###different search-logics:
-#               ##spans
-                
+#               ##spans                
                 min_span = pd.read_csv(f+'.csv', usecols=[3,6], names = ['BRANCH_NO','LOCATION_CODE'])
                 min_span['LOCATION_CODE'] = min_span['LOCATION_CODE'].str[1:]
                 min_span['LOCATION_CODE'] = min_span['LOCATION_CODE'].astype(np.int64)
@@ -109,29 +105,25 @@ for f in file_names:
                     ## determine the starting and ending bay
                     if longest_seq[-1] + 1 > last_bay: #start from the beginning
                         start_order = first_bay
-                #        print('start_order_1:', start_order)
+
                         start_orders.append(start_order)
                         if longest_seq[0] -1 < first_bay: # in case one needs to end at the ending
                             end_order = last_bay
                             end_orders.append(end_order)
-                #            print('end_order_1a:', end_order)
                         else:
                             end_order = longest_seq[0] -1
-                            end_orders.append(end_order)
-                #            print('end_order_1b:', end_order)           
+                            end_orders.append(end_order)         
                                 
                     else:
                         start_order = longest_seq[-1] + 1 #start at the end of the largest gap + 1
-                #        print('start_order_2:', start_order)
                         start_orders.append(start_order)  
+                        
                         if longest_seq[0] -1 < first_bay: # in case one needs to end at the ending
                             end_order = last_bay
                             end_orders.append(end_order)
-                #            print('end_order_2a:', end_order)
                         else:
                             end_order = longest_seq[0] -1
                             end_orders.append(end_order)
-                #            print('end_order_2b:', end_order)
                             
                 min_span = pd.DataFrame()
                 min_span['order_no'] = order_no
@@ -236,31 +228,25 @@ for f in file_names:
                     for n in s:
                         for row in m:
                                 if row[0] == n and np.isin(n, order_2, invert=True): #choose row according to search-logic AND only choose n's that have not been used in order_2 yet
-    #                                print('n after checks:', n)          
-                                    order_1.append(n)
-                    #                print('row:', row)     
+        
+                                    order_1.append(n)  
                                     choose = min(row)
-#                                    print('choice:', choose)
+
                                     loc_r = np.where(m[:,0] == n)[0] #row locations in length-1 array
                                     loc_c = np.where(row == choose)[0] #column locations in length-1 array
-                    #                print('loc_r:', loc_r)
-                    #                print('loc_c:', loc_c)
+
                                     r = int(loc_r[0]) #!choosing the first entry does not always result in the best result but is fast
                                     c = int(loc_c[0])
-                    #                print('r:', r)
-                    #                print('c:', c)
+
                                     n_r = m[r] #row which name will be added to order_1 - similar to n
-                    #                print('n_r:', n_r)
-                    #                print('n_r_loc:', n_r[0])
+
                                     n_c = m[c]
-                    #                print('n_c:', m[c])
-                    #                print('n_c_loc:', n_c[0])
+
                                     order_2.append(n_c[0]) #column name that will be added to order_2
                     #                print('element:', m[r][c]) #delete all rows/columns "connected" to this element at once
                                     m = np.delete(m, [r,c], 0) 
                                     m = np.delete(m, [r,c], 1)
-                    #                print('new m:', m)  
-                    
+                    #                print('new m:', m)                      
                                                 
                     ##timing   
                     elapsed_time_secs = time.time() - start_time           

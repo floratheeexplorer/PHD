@@ -5,7 +5,7 @@ Created on Thu Nov 14 11:57:58 2019
 @author: 20304269
 """
 
-#20191114_assignment_2_lines.py
+#source:20191114_assignment_2_lines.py
 
 import pandas as pd
 import numpy as np
@@ -19,10 +19,9 @@ import numpy as np
 ###only floor SKUs
 #df_floor = pd.concat([df,df_rack,df_rack]).drop_duplicates(keep=False)
 #print(df_floor.info())
-   
-filenames = ['4840+4850+4854', '4887+4856+4884', '4903+4902+4888', '4771+4774+4773', '4783+4784+4786', '4793+4798+4804', '4824+4812+4825', '4987+4986+4996']
 
-#filenames = ['4783+4784+4786']
+#TODO: input filenames  
+filenames = ['4783+4784+4786']
       
 for f in filenames:
     
@@ -35,19 +34,19 @@ for f in filenames:
         
         for l in lines: 
             
+            #TODO: choose an assigment            
 #            assignment = ['_1_1', '_1_2','_1_3', '_1_4'] 
             assignment = ['_1_5'] 
 
             for a in assignment:
-            
+                
+                #TODO: choose an extension            
                 extension = [''] #,'_batched_2_stop_ratio_o_rand', '_batched_2_span_stops_orders_smallest_entry'] -> batching before SKU location
                  
                 for e in extension:                   
     
                     df = pd.read_csv(f+'_loca_hist_'+c+l+a+e+'.csv')
 #                    print(df.head())
-#                    print('f', f)
-#                    print(df.info())
                                    
                     ##all line configuration options at Kuilsriver DC
                     ##ground A floor 76 locations
@@ -206,22 +205,20 @@ for f in filenames:
                     else:
                         SKUs_floor_df = storage.sort_values(by = ['NO_CARTONS', 'PICK_FREQ'], ascending = [False, False])
                         open_floor = len(floor_loca)
-#                        print('open_floor', open_floor)
+
                         SKUs_floor_df = SKUs_floor_df.iloc[:open_floor]
-#                        print('SKUs_floor_df', SKUs_floor_df.head())
-                        SKUs_floor = SKUs_floor_df['SKU_NO'].tolist()
-#                        print('len( SKUs_floor)', len( SKUs_floor))                       
+
+                        SKUs_floor = SKUs_floor_df['SKU_NO'].tolist()                 
                                             
                         for g in range(len(SKUs_floor)):
-    #                        print('g', g)
+
                             floor = floor_loca[0]
                             floor_loca.remove(floor)
                             floor_dict.update({SKUs_floor[g] : floor})                
                         
                         SKUs_rack_df = storage.drop(SKUs_floor_df.index, axis=0)
-#                        print('SKUs_rack_df', SKUs_rack_df)
+
                         SKUs_rack = SKUs_rack_df['SKU_NO'].tolist()
-#                        print('len', len(SKUs_rack), SKUs_rack)
                         
                         for r in range(len(SKUs_rack)):
                             
@@ -229,21 +226,14 @@ for f in filenames:
                                 print('break')
                                 break
                             
-#                            print('r', r)
-#                            print('rack_loca', rack_loca)
                             rack = rack_loca[0]
                             rack_loca.remove(rack)
-                            rack_dict.update({SKUs_rack[r] : rack})    
-                        
-    #                    print('floor_dict', floor_dict)   
-    #                    print('rack_dict', rack_dict)   
-
-#                        df.dropna(inplace=True)                     
-                                        
+                            rack_dict.update({SKUs_rack[r] : rack})                          
+                                                         
                         df.drop('LOCATION_CODE', axis=1, inplace=True)
-                        #print(df.info())                
+             
                         df.insert(4, 'LOCATION_CODE', df['SKU_NO'])
-                        #print(df.info())                           
+                   
                         df.dropna(inplace=True) ##for PEP
                                        
                         df['LOCATION_CODE'].replace(floor_dict, inplace=True)

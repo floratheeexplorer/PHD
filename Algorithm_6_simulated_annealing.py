@@ -15,17 +15,8 @@ import copy
 import time
 from datetime import timedelta
 
-#INPUT: cost matrix (for batches of 2)
-filenames = ['20130425_3150_LOLS_2' , '20130227_1065_LOLS_2', '20130422_2964_LOLS_5', '20130403_2137_LOLS_2', '20130403_2147_LOLS_2', \
-             '20130422_2968_LOLS_5', '20130320_1756_LOLS_2', '20130209_521_LOLS_2', '20130222_852_LOLS_2', '20130223_1814_LOLS_5', \
-             '20130424_3142_LOLS_8', '20130406_2459_LOLS_2', '20130322_1810_LOLS_2', '20130326_1865_LOLS_2', '20130410_2913_LOMS_2', \
-             '20130322_1813_LOMS_8', '20130327_1966_LOMS_2', '20130307_1503_LOMS_5', '20130207_505_LOMS_2', '20130326_1868_LOMS_5', \
-             '20130225_926_LOMS_2', '20130409_2503_LOMS_2', '20130411_2569_LOMS_2', '20130312_1569_LOMS_3', '20130418_2817_LOMS_8', \
-             '20130307_1460_LOMS_8', '20130219_779_LOSS_2', '20130307_1501_LOSS_2', '20130228_1079_LOSS_8', '20130228_1080_LOSS_5', \
-             '20130409_2502_LOSS_5', '20130410_2550_LOSS_8', '20130415_2640_LOSS_5', '20130403_2037_LOSS_3', '20130313_1605_LOSS_2', \
-             '20130318_1715_LOSS_5', '20130216_704_LOSS_2', '20130326_1942_LOSS_5', '20130402_2022_MONS_2', '20130216_701_MONS_5', \
-             '20130212_591_MONS_2', '20130220_790_MONS_5', '20130212_592_MONS_2', '20130225_910_MONS_2', '20130416_2710_SOLS_6', \
-             '20130214_669_SOMS_7', '20130208_517_SOMS_6', '20130223_867_SOSS_5', '20130208_515_SOSS_5', '20130425_3160_SOLS_6']
+#INPUT: file names of cost matrix (for batches of 2)
+filenames = ['20130425_3150_LOLS_2']
 
 for f in filenames:
     
@@ -41,8 +32,6 @@ for f in filenames:
                 df.loc[11111] = int(100)
         for col in df:
             df.loc[col, col] = 100
-#        print('New df with dummy 100:')  
-#        print(df.head(3))
         
         #INPUT for batching
         df2 = pd.read_csv(f+'.csv', names = ['SCHEDULE_DATE', 'RELEASE_DATE', 'LINE_NO', 'BRANCH_NO', 'DBN_NO', 'SKU_NO', 'LOCATION_CODE', 'NUM_UNITS_y', 'NUM_BRANCHES', 'NUM_UNITS_x', 'VOLUME_PER_UNIT', 'WEIGHT_PER_UNIT_KG']) 
@@ -50,14 +39,13 @@ for f in filenames:
         batch_list = []
         
         ###simulated annealing algorithm:
-        #Example code: http://katrinaeg.com/simulated-annealing.html
+        #INSPIRATION: http://katrinaeg.com/simulated-annealing.html
         
         #Step1: Generate a random solution (random or greedy)
         o = df.columns.tolist()
         sol = random.sample(o, len(o)) #random
-#        print('sol', sol)
         
-        #Step2: Calculate cost - TODO: Needs to be efficient since it gets called with each iteration! Change if more than 2 orders are being batched!
+        #Step2: Calculate cost 
         #@profile
         def cost(sol):
             order_1 = sol[:int(len(sol)/2)]
@@ -69,7 +57,7 @@ for f in filenames:
             cost = sum(comp)
             return cost
         
-        #Step3: Generate a random neighboring solution - TODO: Check if swapping two items is what we want
+        #Step3: Generate a random neighboring solution 
         #@profile
         def neighbour(sol):
             idx = range(len(sol))
@@ -188,7 +176,7 @@ for f in filenames:
         batched.to_csv(f+'_batched_2'+g+'_sa_perturbations.csv',  index=None, header=False) 
 
 print('\007')        
-print('Done :-)')       
+print('Metta')       
             
 
         

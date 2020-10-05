@@ -5,7 +5,7 @@ Created on Wed Feb 13 15:15:15 2019
 @author: 20304269
 
 """
-#20190709_simu_z_modul_10_config.py
+#source:20190709_simu_z_modul_10_config.py
 
 import pandas as pd
 import numpy as np
@@ -75,8 +75,9 @@ walking_speed_order = []
 crossing_speed_order = []
 picking_speed_order = []
 packing_speed_order = []        
-      
-filenames = ['L3Z_picks_3660', 'L3Z_picks_3410','L3Z_picks_3141', 'L3Z_picks_3569', 'L3Z_picks_3281', 'L3Z_picks_3735', 'L3Z_picks_3597', 'L3Z_picks_3441', 'L3Z_picks_3709', 'L3Z_picks_3348']
+
+#TODO: import file names      
+filenames = ['L3Z_picks_3660']
 
 for f in filenames:       
     
@@ -152,8 +153,7 @@ for f in filenames:
 #                print('packing', packing)  
                 
                 packing_boxes.append(pack_slip)
-                packing_speed.append(packing) 
-                                 
+                packing_speed.append(packing)                                  
                               
                 #### walk + pick
                 orders = df['BATCH_NO'].unique().tolist()
@@ -349,7 +349,7 @@ for f in filenames:
             
         #all configurations for data                    
         filename.append(f)
-        extension.append(e)            
+        #extension.append(e)            
         picker_no.append(pickers)
         pick_dens_m.append(picking_density_m)
         avg_times_total = np.mean(total_times)
@@ -371,7 +371,7 @@ with file:
     writer = csv.writer(file)
     writer.writerows(data)
                                        
-data2 = [filename, extension, picker_no, pick_dens_m, avg_total_times, avg_total_time_delaying, avg_total_time_pickers]
+data2 = [filename, picker_no, pick_dens_m, avg_total_times, avg_total_time_delaying, avg_total_time_pickers]
         
 ##batching algorithm specific   
 file = open('20200312_simu_z_line_module_nearest_end_delay_8_pickers'+e+'_10_config.csv', 'w')
